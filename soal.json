@@ -1,0 +1,77 @@
+[
+    {
+        "nama" : "./img/soal/soal 1.jpg",
+        "hint" : "Pemain Sepakbola",
+        "jawaban" : "lionel messi"
+    },
+    {
+        "nama" : "./img/soal/soal 2.jpg",
+        "hint" : "Aktor Pria",
+        "jawaban" : "chris hemsworth"
+    },
+    {
+        "nama" : "./img/soal/soal 3.jpg",
+        "hint" : "Aktor Pria",
+        "jawaban" : "tom holland"
+    },
+    {
+        "nama" : "./img/soal/soal 4.jpg",
+        "hint" : "Aktor Pria",
+        "jawaban" : "bradley cooper"
+    },
+    {
+        "nama" : "./img/soal/soal 5.jpg",
+        "hint" : "Aktor Pria",
+        "jawaban" : "reza rahardian"
+    },
+    {
+        "nama" : "./img/soal/soal 6.jpg",
+        "hint" : "Penyanyi Wanita",
+        "jawaban" : "ariana grande"
+    },
+    {
+        "nama" : "./img/soal/soal 7.jpg",
+        "hint" : "Aktris Wanita",
+        "jawaban" : "nikita willy"
+    },
+    {
+        "nama" : "./img/soal/soal 8.jpg",
+        "hint" : "Aktris Wanita",
+        "jawaban" : "titi kamal"
+    },
+    {
+        "nama" : "./img/soal/soal 9.jpg",
+        "hint" : "Penyanyi Pria",
+        "jawaban" : "justin timberlake"
+    },
+    {
+        "nama" : "./img/soal/soal 10.jpg",
+        "hint" : "Penyanyi Wanita",
+        "jawaban" : "selena gomez"
+    },
+    {
+        "nama" : "./img/soal/soal 11.jpg",
+        "hint" : "Aktor Pria",
+        "jawaban" : "robert downey jr"
+    },
+    {
+        "nama" : "./img/soal/soal 12.jpg",
+        "hint" : "Penyanyi Wanita",
+        "jawaban" : "mariah carey"
+    },
+    {
+        "nama" : "./img/soal/soal 13.jpg",
+        "hint" : "Aktris Wanita",
+        "jawaban" : "putri marino"
+    },
+    {
+        "nama" : "./img/soal/soal 14.jpg",
+        "hint" : "Aktris Wanita",
+        "jawaban" : "sophia latjuba"
+    },
+    {
+        "nama" : "./img/soal/soal 15.jpg",
+        "hint" : "Penyanyi Pria",
+        "jawaban" : "bob tutupoly"
+    }
+]
