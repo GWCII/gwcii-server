@@ -11,6 +11,10 @@ app.get('/', (req, res) => {
 });
 
 let rooms = [];
+app.get('/soal', (req, res) => {
+  const soal = require('./soal.json')
+  res.send(soal)
+});
 
 //* Listen
 io.on('connection', (socket) => {
