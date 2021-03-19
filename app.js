@@ -7,24 +7,54 @@ const cors = require('cors')
 const port = process.env.PORT || 3000
 app.use(cors())
 app.use(express.json())
+const cors = require('cors');
 
 app.get('/', (req, res) => {
   res.send('Helloword');
 });
 
-app.get('/soal', (req, res) => {
-  const soal = require('./soal.json')
-  res.send(soal)
-});
+let rooms = [];
+const soal = require('./soal.json')
+
 
 //* Listen
 io.on('connection', (socket) => {
   
-  socket.on('test', (data) => {
-    io.emit('test', data)
-    console.log('user added');
+  socket.on('login', (data) => {
+    io.emit('getRooms', rooms)
   })
 
+  socket.on('createRoom', (data) => {
+    let room  = {
+      name: data.name,
+      users: [],
+      admin: data.admin
+    }
+    rooms.push(room);
+    io.emit('updatedRoom', rooms);
+    socket.emit('initSoal', soal)
+  })
+
+  socket.on('getRooms', () => {
+    io.emit('getRooms', rooms);
+  })
+
+  socket.on('joinRoom', (data) => {
+    socket.join(data.name, function() {
+      let userData = {
+        username: data.username,
+        score: data.score
+      }
+      let roomIndex = rooms.findIndex( el => el.name === data.name);
+      rooms[roomIndex].users.push(userData);
+      io.sockets.in(data.name).emit('roomDetail', rooms[roomIndex]);
+      socket.emit('initSoal', soal)
+    })
+  })
+
+  socket.on('letsPlay', (data) => {
+    socket.broadcast.emit('letsPlay', data)
+  })
 });
 
 http.listen(port, () => {
