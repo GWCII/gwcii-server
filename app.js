@@ -33,6 +33,25 @@ io.on('connection', (socket) => {
     io.emit('updatedRoom', rooms);
   })
 
+  socket.on('getRooms', () => {
+    io.emit('getRooms', rooms);
+  })
+
+  socket.on('joinRoom', (data) => {
+    socket.join(data.name, function() {
+      let userData = {
+        username: data.username,
+        score: data.score
+      }
+      let roomIndex = rooms.findIndex( el => el.name === data.name);
+      rooms[roomIndex].users.push(userData);
+      io.sockets.in(data.name).emit('roomDetail', rooms[roomIndex]);
+    })
+  })
+
+  socket.on('letsPlay', (data) => {
+    socket.broadcast.emit('letsPlay', data)
+  })
 });
 
 http.listen(port, () => {
