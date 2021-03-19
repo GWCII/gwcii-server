@@ -1,10 +1,9 @@
-const app = require('express')();
+const express = require('express')
+const app = express()
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
-const cors = require('cors');
-
 const port = process.env.PORT || 3000
-app.use(cors())
+
 
 const soal = require('./soal.json')
 let rooms = []
@@ -44,6 +43,7 @@ io.on('connection', (socket) => {
         rooms[roomIndex].users.push(userData);
       } 
       io.sockets.in(data.name).emit('roomDetail', rooms[roomIndex]);
+      socket.emit('initSoal', soal)
     })
   })
 
@@ -57,6 +57,20 @@ io.on('connection', (socket) => {
     const questions = require('./soal.json')
     io.emit('addQuestion', questions)
   })
+
+  socket.on('trueAnswer', (data) => {
+
+    let roomIndex = rooms.findIndex(room => room.name === data.name)
+    let userIndex = rooms[roomIndex].users.findIndex(user => user.username === data.username)
+    rooms[roomIndex].users[userIndex].score += 10
+
+    if(rooms[roomIndex].users[userIndex].score === 100) {
+      io.emit('winner', rooms[roomIndex])
+    } else {
+      io.emit('updateScore', rooms[roomIndex].users[userIndex])
+    }
+  })
+
 });
 
 http.listen(port, () => {
