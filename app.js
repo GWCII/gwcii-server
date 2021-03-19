@@ -5,14 +5,8 @@ const io = require('socket.io')(http);
 const port = process.env.PORT || 3000
 
 
-app.get('/', (req, res) => {
-  res.send('Helloword');
-});
-
-let rooms = [];
 const soal = require('./soal.json')
-
-
+let rooms = []
 //* Listen
 io.on('connection', (socket) => {
   
@@ -24,15 +18,17 @@ io.on('connection', (socket) => {
     let room  = {
       name: data.name,
       users: [],
-      admin: data.admin
+      admin: data.admin,
+      isStarted:false
     }
     rooms.push(room);
-    io.emit('updatedRoom', rooms);
-    socket.emit('initSoal', soal)
+    const filtered = rooms.filter(room => room.isStarted === false)
+    io.emit('updatedRoom', filtered);
   })
 
   socket.on('getRooms', () => {
-    io.emit('getRooms', rooms);
+    const filtered = rooms.filter(room => room.isStarted === false)
+    io.emit('getRooms', filtered);
   })
 
   socket.on('joinRoom', (data) => {
@@ -42,14 +38,24 @@ io.on('connection', (socket) => {
         score: data.score
       }
       let roomIndex = rooms.findIndex( el => el.name === data.name);
-      rooms[roomIndex].users.push(userData);
+      const exist = rooms[roomIndex].users.find(user => user.username === data.username);
+      if(!exist){
+        rooms[roomIndex].users.push(userData);
+      } 
       io.sockets.in(data.name).emit('roomDetail', rooms[roomIndex]);
       socket.emit('initSoal', soal)
     })
   })
 
   socket.on('letsPlay', (data) => {
-    socket.broadcast.emit('letsPlay', data)
+    const roomIndex = rooms.findIndex(room => room.name === data.name)
+    rooms[roomIndex].isStarted = true
+    io.emit('letsPlay', data.isStart)
+  })
+
+  socket.on('addQuestion', () => {
+    const questions = require('./soal.json')
+    io.emit('addQuestion', questions)
   })
 
   socket.on('trueAnswer', (data) => {
@@ -59,7 +65,7 @@ io.on('connection', (socket) => {
     rooms[roomIndex].users[userIndex].score += 10
 
     if(rooms[roomIndex].users[userIndex].score === 100) {
-      io.emit('winner', rooms[roomIndex].users[userIndex])
+      io.emit('winner', rooms[roomIndex])
     } else {
       io.emit('updateScore', rooms[roomIndex].users[userIndex])
     }
