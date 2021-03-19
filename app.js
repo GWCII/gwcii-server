@@ -2,12 +2,8 @@ const express = require('express')
 const app = express()
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
-const cors = require('cors')
-
 const port = process.env.PORT || 3000
-app.use(cors())
-app.use(express.json())
-const cors = require('cors');
+
 
 app.get('/', (req, res) => {
   res.send('Helloword');
@@ -55,6 +51,20 @@ io.on('connection', (socket) => {
   socket.on('letsPlay', (data) => {
     socket.broadcast.emit('letsPlay', data)
   })
+
+  socket.on('trueAnswer', (data) => {
+
+    let roomIndex = rooms.findIndex(room => room.name === data.name)
+    let userIndex = rooms[roomIndex].users.findIndex(user => user.username === data.username)
+    rooms[roomIndex].users[userIndex].score += 10
+
+    if(rooms[roomIndex].users[userIndex].score === 100) {
+      io.emit('winner', rooms[roomIndex].users[userIndex])
+    } else {
+      io.emit('updateScore', rooms[roomIndex].users[userIndex])
+    }
+  })
+
 });
 
 http.listen(port, () => {
