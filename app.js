@@ -1,9 +1,14 @@
+if (process.env.NODE_ENV === 'development') {
+  require("dotenv").config()
+}
 const express = require('express')
 const app = express()
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
 const port = process.env.PORT || 3000
+const cors = require('cors')
 
+app.use(cors())
 
 const soal = require('./soal.json')
 let rooms = []
